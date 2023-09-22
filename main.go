@@ -126,7 +126,7 @@ func waitForPod(ctx context.Context, client *kubernetes.Clientset, deploymentsla
 				podsRunning++
 			}
 		}
-		fmt.Printf("waiting for pods to become ready.(running %d /%d)", podsRunning, len(podList.Items))
+		fmt.Printf("waiting for pods to become ready.(running %d /%d)\n", podsRunning, len(podList.Items))
 
 		if podsRunning > 0 && podsRunning == len(podList.Items) {
 			break
