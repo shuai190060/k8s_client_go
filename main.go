@@ -126,11 +126,12 @@ func waitForPod(ctx context.Context, client *kubernetes.Clientset, deploymentsla
 				podsRunning++
 			}
 		}
+		fmt.Printf("waiting for pods to become ready.(running %d /%d)", podsRunning, len(podList.Items))
+
 		if podsRunning > 0 && podsRunning == len(podList.Items) {
 			break
 		}
 		time.Sleep(5 * time.Second)
-		fmt.Printf("waiting for pdos to become ready.(running %d /%d)", podsRunning, len(podList.Items))
 
 	}
 	return nil
