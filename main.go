@@ -94,7 +94,7 @@ func deploy(ctx context.Context, client *kubernetes.Clientset) (map[string]strin
 	// decode := schema.Codecs.UniversalDeserializer().Decode
 	deploymentResponse, err := client.AppsV1().Deployments("default").Create(ctx, deployment, metav1.CreateOptions{})
 	if err != nil && errors.IsAlreadyExists(err) {
-		existingDeployment, getErr := client.AppsV1().Deployments("default").Get(ctx, deployment.Name, metav1.GetOptions{})
+		existingDeployment, getErr := client.AppsV1().Deployments("default").Update(ctx, deployment, metav1.UpdateOptions{})
 		if getErr != nil {
 			return nil, fmt.Errorf("error fetch deployment: %s", getErr)
 		}
@@ -129,8 +129,9 @@ func waitForPod(ctx context.Context, client *kubernetes.Clientset, deploymentsla
 		if podsRunning > 0 && podsRunning == len(podList.Items) {
 			break
 		}
-		fmt.Printf("waiting for pdos to become ready.(running %d /%d)", podsRunning, len(podList.Items))
 		time.Sleep(5 * time.Second)
+		fmt.Printf("waiting for pdos to become ready.(running %d /%d)", podsRunning, len(podList.Items))
+
 	}
 	return nil
 }
